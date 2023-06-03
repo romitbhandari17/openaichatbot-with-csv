@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot Widget</title>
+    <style>
+        /* Chatbot widget styles */
+        .chatbot-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            width: 350px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            /*transition: all 0.3s ease-in-out;
+            transform: translateY(100%);*/
+            opacity: 1;
+        }
+
+        .chatbot-widget-open {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .chatbot-widget-open #toggle-icon {
+            transform: rotate(45deg);
+        }
+
+        .chatbot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        .chatbot-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: normal;
+        }
+
+        /* .chatbot-header button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+        } */
+
+        #toggle-icon {
+            font-size: 30px;
+            line-height: 1;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .chatbot-body {
+            padding: 10px;
+            max-height: 400px;
+            overflow-y: scroll;
+            background-color: #f7f7f7;
+        }
+
+        .chatbot-message {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .chatbot-message p {
+            margin: 0;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 70%;
+        }
+
+        .chatbot-question {
+            background-color: #fff;
+            color: #333;
+            align-self: flex-start;
+        }
+
+        .chatbot-answer {
+            background-color: #4CAF50;
+            color: #fff;
+            align-self: flex-end;
+        }
+
+        .chatbot-input {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-top: 1px solid #eee;
+            background-color: #f7f7f7;
+        }
+
+        .chatbot-input input {
+            flex-grow: 1;
+            border: none;
+            padding: 10px;
+            border-radius: 20px;
+            font-size: 16px;
+            background-color: #fff;
+        }
+
+        .chatbot-input button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 20px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .chatbot-header button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+        }
+
+        #toggle-icon-open,
+        #toggle-icon-closed {
+            font-size: 30px;
+            line-height: 1;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #toggle-icon-closed {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="chatbot-widget" id="chatbot-widget">
+        <div class="chatbot-header">
+            <h3>Chatbot</h3>
+            <button onclick="toggleChatbot()" id="chatbot-toggle-button">
+                <span id="toggle-icon-open" class="toggle-icon">x</span>
+                <span id="toggle-icon-closed" class="toggle-icon">+</span>
+            </button>
+        </div>
+        <div class="chatbot-body" id="chatbot-body">
+            <div class="chatbot-message chatbot-answer">
+                <p>Hello, how can I help you today?</p>
+            </div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatbot-input" placeholder="Ask me anything...">
+            <button onclick="submitQuestion()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Chatbot logic
+        function generateAnswer(question) {
+            const data = { "question": question };
+            return fetch("/answer_question", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(data => data["text"].trim())
+                .catch(error => {
+                    console.error(error);
+                    return "Sorry, I couldn't understand your question. Please try again.";
+                });
+        }
+
+        function toggleChatbot() {
+            console.log("toggle fnc")
+            const chatbotWidget = document.getElementById("chatbot-widget");
+            const chatbotBody = document.getElementById("chatbot-body");
+            const toggleIconOpen = document.getElementById("toggle-icon-open");
+            const toggleIconClosed = document.getElementById("toggle-icon-closed");
+
+            if (!chatbotWidget.classList.contains("chatbot-widget-open")) {
+                console.log("to collapse")
+                chatbotWidget.classList.add("chatbot-widget-open");
+                toggleIconOpen.style.display = "none";
+                chatbotBody.style.display = "none";
+                toggleIconClosed.style.display = "inline-block";
+            } else {
+                console.log("to expand")
+                chatbotWidget.classList.remove("chatbot-widget-open");
+                toggleIconOpen.style.display = "inline-block";
+                toggleIconClosed.style.display = "none";
+                chatbotBody.style.display = "inline-block";
+            }
+        }
+
+        function submitQuestion() {
+            const inputElement = document.getElementById("chatbot-input");
+            const question = inputElement.value.trim();
+            if (question === "") return;
+            const chatbotBody = document.getElementById("chatbot-body");
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("chatbot-message");
+            messageElement.classList.add("chatbot-question");
+            messageElement.innerHTML = `<p>${question}</p>`;
+            chatbotBody.appendChild(messageElement);
+            inputElement.value = "";
+            chatbotBody.scrollTop = chatbotBody.scrollHeight;
+            generateAnswer(question)
+                .then(answer => {
+                    const messageElement = document.createElement("div");
+                    messageElement.classList.add("chatbot-message");
+                    messageElement.classList.add("chatbot-answer");
+                    messageElement.innerHTML = `<p>${answer}</p>`;
+                    chatbotBody.appendChild(messageElement);
+                    chatbotBody.scrollTop = chatbotBody.scrollHeight;
+                });
+        }
+    </script>
+</body>
+</html>

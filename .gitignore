@@ -1,0 +1,5 @@
+qsenv/
+data/
+__pycache__/
+wur_ranking_summary_embeddings.csv
+wur_ranking_summary.csv
