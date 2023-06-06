@@ -1,5 +1,6 @@
 # imports
 import pandas as pd
+from config import *
 try:
     import tiktoken
     print("tiktoken is installed and accessible.")
@@ -9,7 +10,7 @@ except ImportError:
 import openai
 import os
 from flask import jsonify
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = OPENAI_API_KEY
 
 from openai.embeddings_utils import get_embedding
 

@@ -1,11 +1,7 @@
 from __future__ import print_function
 from config import *
-
-import tiktoken
-import uuid
 import sys
 import logging
-import os
 import requests
 from flask import Flask, jsonify, render_template
 from flask_cors import CORS, cross_origin

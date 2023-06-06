@@ -3,6 +3,8 @@ PINECONE_API_KEY: "xxxxyyyy"
 PINECONE_INDEX: "qs-online-index" # dimensions: 1536, metric: cosine similarity
 PINECONE_ENV: "asia-southeast1-gcp"
 
+OPENAI_API_KEY: "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"
+
 # ----- SERVER PORT ----
 SERVER_PORT: "8080"
 

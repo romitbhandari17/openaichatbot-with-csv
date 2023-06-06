@@ -1,5 +1,6 @@
 qsenv/
 data/
 __pycache__/
+config.yaml
 wur_ranking_summary_embeddings.csv
 wur_ranking_summary.csv
