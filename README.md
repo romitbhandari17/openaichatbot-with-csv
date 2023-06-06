@@ -1,9 +1,9 @@
-# Cahtbot with CSV as Input using Open AI Models
+# Chatbot with CSV as Input using Open AI Models
 
 This is a chat application that leverages the power of text-davinci-003 to provide conversational responses with access to a data source in CSV format. Typically, following steps are followed:
-Through an OpenAI Embedding model 'text-embedding-ada-002', embeddings are created for each of the records in the input data source.
-When a question is asked, a context is created from the dataframe by finding the most similar context(s) using embeddings (created in Step 2) and relative distancing between them.
-Using the question and the context from above and the power of text-davinci-003, a suitable answer is generated and returned to the user.
+- Through an OpenAI Embedding model 'text-embedding-ada-002', embeddings are created for each of the records in the input data source.
+- When a question is asked, a context is created from the dataframe by finding the most similar context (s) using embeddings (created in Step 2) and relative distancing between them.
+- Using the question and the context from above and the power of text-davinci-003, a suitable answer is generated and returned to the user.
 
 
 ## Features
